@@ -26,7 +26,6 @@ class SynapseDashboard extends ConsumerWidget {
         children: [
           // Dynamic background painter
           CustomPaint(
-            size: Size.infinite,
             painter: ScoreBackgroundPainter(score: state.synapseScore),
             child: Container(),
           ),
@@ -254,7 +253,7 @@ class SynapseDashboard extends ConsumerWidget {
   Widget _buildShieldToggle(
     BuildContext context,
     bool isActive,
-    dynamic controller,
+    SynapseScoreController controller,
   ) {
     return SizedBox(
       width: double.infinity,
@@ -288,7 +287,7 @@ class SynapseDashboard extends ConsumerWidget {
   }
 
   /// Biometric sync button
-  Widget _buildSyncButton(BuildContext context, dynamic controller) {
+  Widget _buildSyncButton(BuildContext context, SynapseScoreController controller) {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(

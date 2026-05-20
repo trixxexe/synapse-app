@@ -2,10 +2,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 
 /// PrivacyManager
-/// 
+///
 /// Handles all local data persistence with privacy-first principles:
 /// - No cloud sync or external transmission of biometric data
-/// - All data stored encrypted on-device via SharedPreferences
+/// - All data stored on-device via SharedPreferences
 /// - User can purge all data at any time
 /// - No analytics or tracking identifiers
 class PrivacyManager {
@@ -30,19 +30,22 @@ class PrivacyManager {
 
   /// Record user consent for data processing (required by GDPR/health regulations)
   Future<void> grantConsent() async {
-    await _prefs?.setBool(_consentKey, true);
+    _ensureInitialized();
+    await _prefs!.setBool(_consentKey, true);
     debugPrint('[PrivacyManager] Consent granted');
   }
 
   /// Revoke consent and purge all stored data
   Future<void> revokeConsentAndPurge() async {
-    await _prefs?.clear();
+    _ensureInitialized();
+    await _prefs!.clear();
     debugPrint('[PrivacyManager] All data purged, consent revoked');
   }
 
   /// Persist the current energy level
   Future<void> saveEnergyLevel(double energy) async {
-    await _prefs?.setDouble(_energyKey, energy);
+    _ensureInitialized();
+    await _prefs!.setDouble(_energyKey, energy);
   }
 
   /// Retrieve stored energy level (defaults to 0.5)
@@ -52,7 +55,8 @@ class PrivacyManager {
 
   /// Persist the current focus level
   Future<void> saveFocusLevel(double focus) async {
-    await _prefs?.setDouble(_focusKey, focus);
+    _ensureInitialized();
+    await _prefs!.setDouble(_focusKey, focus);
   }
 
   /// Retrieve stored focus level (defaults to 0.5)
@@ -62,7 +66,8 @@ class PrivacyManager {
 
   /// Persist shield state
   Future<void> saveShieldState(bool active) async {
-    await _prefs?.setBool(_shieldKey, active);
+    _ensureInitialized();
+    await _prefs!.setBool(_shieldKey, active);
   }
 
   /// Retrieve stored shield state
@@ -72,7 +77,8 @@ class PrivacyManager {
 
   /// Persist last sync timestamp
   Future<void> saveLastSync(DateTime time) async {
-    await _prefs?.setString(_lastSyncKey, time.toIso8601String());
+    _ensureInitialized();
+    await _prefs!.setString(_lastSyncKey, time.toIso8601String());
   }
 
   /// Retrieve last sync timestamp
@@ -82,5 +88,12 @@ class PrivacyManager {
       return DateTime.tryParse(stored);
     }
     return null;
+  }
+
+  /// Guard: throw if not initialized to prevent silent data loss
+  void _ensureInitialized() {
+    if (_prefs == null) {
+      throw StateError('PrivacyManager must be initialized before use. Call initialize() first.');
+    }
   }
 }

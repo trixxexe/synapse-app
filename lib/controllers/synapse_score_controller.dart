@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/synapse_state.dart';
 import '../services/biometric_sync_service.dart';
@@ -11,7 +12,9 @@ final biometricServiceProvider = Provider<BiometricSyncService>((ref) {
 
 /// Provider for the NotificationMediatorService (singleton)
 final notificationMediatorProvider = Provider<NotificationMediatorService>((ref) {
-  return NotificationMediatorService();
+  final service = NotificationMediatorService();
+  ref.onDispose(() => service.dispose());
+  return service;
 });
 
 /// Provider for the PrivacyManager (singleton)
@@ -20,7 +23,7 @@ final privacyManagerProvider = Provider<PrivacyManager>((ref) {
 });
 
 /// SynapseScoreController
-/// 
+///
 /// Central state controller that manages the SynapseState using Riverpod.
 /// Handles:
 /// - Biometric data fetching and energy computation
@@ -92,11 +95,11 @@ class SynapseScoreController extends StateNotifier<SynapseState> {
 
   /// Update focus level based on user activity patterns
   /// Called periodically or when significant events occur
-  void updateFocusLevel(double newFocus) {
+  Future<void> updateFocusLevel(double newFocus) async {
     state = state.copyWith(
       focusLevel: newFocus.clamp(0.0, 1.0),
     );
-    _privacyManager.saveFocusLevel(state.focusLevel);
+    await _privacyManager.saveFocusLevel(state.focusLevel);
   }
 
   /// Toggle the Focus Shield (DND mediation layer)
@@ -115,8 +118,8 @@ class SynapseScoreController extends StateNotifier<SynapseState> {
       state = state.copyWith(isShieldActive: false);
     }
 
-    _privacyManager.saveShieldState(state.isShieldActive);
-    _privacyManager.saveFocusLevel(state.focusLevel);
+    await _privacyManager.saveShieldState(state.isShieldActive);
+    await _privacyManager.saveFocusLevel(state.focusLevel);
   }
 
   /// Grant consent for local health data processing
@@ -127,7 +130,6 @@ class SynapseScoreController extends StateNotifier<SynapseState> {
   /// Revoke consent and purge all data
   Future<void> revokeConsent() async {
     await _privacyManager.revokeConsentAndPurge();
-    await _notificationService.dispose();
     state = const SynapseState();
   }
 }

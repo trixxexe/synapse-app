@@ -50,7 +50,7 @@ class NotificationMediatorService {
 
     // Note: Android DND access cannot be programmatically verified without
     // platform channel code. We return true after opening settings to
-    /// indicate the user has been prompted.
+    // indicate the user has been prompted.
     debugPrint('[NotificationMediator] DND settings opened');
     return true;
   }

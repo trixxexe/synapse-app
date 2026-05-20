@@ -1,9 +1,8 @@
 import 'package:health/health.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/foundation.dart';
 
 /// Privacy-first biometric data service.
-/// 
+///
 /// Handles secure integration with Apple HealthKit and Google Health Connect.
 /// All data is processed locally; no biometric data is transmitted externally.
 class BiometricSyncService {
@@ -12,7 +11,7 @@ class BiometricSyncService {
   // Types of health data we read for energy calculation
   static const List<HealthDataType> _readTypes = [
     HealthDataType.HEART_RATE,
-    HealthDataType.HEART_RATE_VARIABILITY_RMSSD,
+    HealthDataType.HEART_RATE_VARIABILITY_SDNN,
     HealthDataType.SLEEP_ASLEEP,
     HealthDataType.STEPS,
     HealthDataType.RESTING_HEART_RATE,
@@ -21,9 +20,8 @@ class BiometricSyncService {
   /// Request platform-specific health permissions.
   /// Returns true if at least one permission was granted.
   Future<bool> requestPermissions() async {
-    // Request general health permission on Android
-    final bool hasPermission = await _health.hasPermissions(_readTypes);
-    if (hasPermission) return true;
+    final bool? hasPermission = await _health.hasPermissions(_readTypes);
+    if (hasPermission == true) return true;
 
     try {
       final bool granted = await _health.requestAuthorization(_readTypes);
@@ -61,7 +59,7 @@ class BiometricSyncService {
         metrics['heartRate'] = _clamp((100 - avgHR) / 40, 0.0, 1.0);
       }
 
-      // Fetch sleep data
+      // Fetch sleep data (values are already in minutes)
       final sleepData = await _health.getHealthDataFromTypes(
         startTime: yesterday,
         endTime: now,
@@ -72,9 +70,9 @@ class BiometricSyncService {
         final totalSleepMinutes = sleepData
             .where((d) => d.value is num)
             .map((d) => (d.value as num).toDouble())
-            .reduce((a, b) => a + b) / 60; // Convert seconds to minutes
+            .reduce((a, b) => a + b);
 
-        // Normalize: 7-9 hours maps to 0.0-1.0
+        // Normalize: 7-9 hours (420-540 min) maps to 0.0-1.0
         metrics['sleep'] = _clamp((totalSleepMinutes - 420) / 120, 0.0, 1.0);
       }
 

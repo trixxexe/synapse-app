@@ -60,11 +60,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-        <!-- Health Connect SDK metadata -->
-        <meta-data
-            android:name="health_connect"
-            android:value="true" />
-
         <!-- Notification channel configuration for foreground service -->
         <service
             android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
@@ -94,6 +89,7 @@
 
     <!-- Required for package visibility (Android 11+) -->
     <queries>
+        <package android:name="com.google.android.apps.healthdata" />
         <intent>
             <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
         </intent>

@@ -5,10 +5,11 @@ import 'config/theme.dart';
 import 'widgets/synapse_dashboard.dart';
 import 'controllers/synapse_score_controller.dart';
 import 'utils/privacy_manager.dart';
+import 'services/biometric_sync_service.dart';
 import 'services/notification_mediator_service.dart';
 
 /// Synapse App Entry Point
-/// 
+///
 /// Initializes all services, configures system UI, and launches the
 /// context-aware productivity engine.
 void main() async {
@@ -32,10 +33,13 @@ void main() async {
   final notificationService = NotificationMediatorService();
   await notificationService.initialize();
 
+  final biometricService = BiometricSyncService();
+
   runApp(
     ProviderScope(
       overrides: [
         // Inject initialized services into Riverpod
+        biometricServiceProvider.overrideWithValue(biometricService),
         privacyManagerProvider.overrideWithValue(privacyManager),
         notificationMediatorProvider.overrideWithValue(notificationService),
       ],

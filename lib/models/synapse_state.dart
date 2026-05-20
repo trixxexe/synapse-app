@@ -45,4 +45,22 @@ class SynapseState {
   @override
   String toString() => 'SynapseState(energy: ${energyLevel.toStringAsFixed(2)}, '
       'focus: ${focusLevel.toStringAsFixed(2)}, shield: $isShieldActive)';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SynapseState &&
+          runtimeType == other.runtimeType &&
+          energyLevel == other.energyLevel &&
+          focusLevel == other.focusLevel &&
+          isShieldActive == other.isShieldActive &&
+          lastSyncTime == other.lastSyncTime;
+
+  @override
+  int get hashCode => Object.hash(
+        energyLevel,
+        focusLevel,
+        isShieldActive,
+        lastSyncTime,
+      );
 }
