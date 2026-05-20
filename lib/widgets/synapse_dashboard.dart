@@ -276,7 +276,7 @@ class SynapseDashboard extends ConsumerWidget {
               : SynapseTheme.accentPrimary,
           side: isActive
               ? null
-              : const BorderSide(color: SynapseTheme.accentPrimary, width: 2),
+              : BorderSide(color: SynapseTheme.accentPrimary, width: 2),
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),

@@ -61,7 +61,7 @@ class SynapseTheme {
         ),
       ),
       cardTheme: CardTheme(
-        color: WidgetStateProperty.all(_bgCard),
+        color: _bgCard,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(

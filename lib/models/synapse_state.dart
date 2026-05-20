@@ -20,8 +20,22 @@ class SynapseState {
     this.energyLevel = 0.5,
     this.focusLevel = 0.5,
     this.isShieldActive = false,
-    DateTime? lastSyncTime,
-  }) : lastSyncTime = lastSyncTime ?? DateTime.now();
+    required this.lastSyncTime,
+  });
+
+  /// Factory constructor that defaults lastSyncTime to now
+  factory SynapseState.now({
+    double energyLevel = 0.5,
+    double focusLevel = 0.5,
+    bool isShieldActive = false,
+  }) {
+    return SynapseState(
+      energyLevel: energyLevel,
+      focusLevel: focusLevel,
+      isShieldActive: isShieldActive,
+      lastSyncTime: DateTime.now(),
+    );
+  }
 
   /// Create a copy with modified fields (immutable update pattern)
   SynapseState copyWith({

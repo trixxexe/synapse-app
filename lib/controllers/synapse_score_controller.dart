@@ -51,7 +51,7 @@ class SynapseScoreController extends StateNotifier<SynapseState> {
   })  : _biometricService = biometricService,
         _notificationService = notificationService,
         _privacyManager = privacyManager,
-        super(const SynapseState()) {
+        super(SynapseState.now()) {
     _restoreState();
   }
 
@@ -130,6 +130,6 @@ class SynapseScoreController extends StateNotifier<SynapseState> {
   /// Revoke consent and purge all data
   Future<void> revokeConsent() async {
     await _privacyManager.revokeConsentAndPurge();
-    state = const SynapseState();
+    state = SynapseState.now();
   }
 }
