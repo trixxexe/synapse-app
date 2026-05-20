@@ -16,10 +16,10 @@ dependencies:
   riverpod_annotation: ^2.3.3
 
   # Health & Biometric Data Integration
-  health: ^12.0.0
+  health: ^11.1.0
 
   # Local Notifications & DND Control
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications: ^17.2.2
 
   # Typography & Theming
   google_fonts: ^6.1.0

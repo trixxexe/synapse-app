@@ -30,8 +30,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.synapse.app"
-    compileSdk = 35
-    ndkVersion = "27.0.12077973"
+    compileSdk = 34
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -46,7 +46,7 @@ android {
     defaultConfig {
         applicationId = "com.synapse.app"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 34
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
         multiDexEnabled true
@@ -83,5 +83,5 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10"
 }
