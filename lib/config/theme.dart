@@ -50,10 +50,10 @@ class SynapseTheme {
         onPrimary: _bgDeep,
         onSurface: _textPrimary,
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        titleTextStyle: GoogleFonts.inter(
+        scrolledUnderElevation: 0,
+        titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w700,
           color: _textPrimary,

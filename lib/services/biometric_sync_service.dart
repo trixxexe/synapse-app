@@ -49,12 +49,13 @@ class BiometricSyncService {
         types: [HealthDataType.HEART_RATE],
       );
 
-      if (heartRateData.isNotEmpty) {
-        final avgHR = heartRateData
-            .where((d) => d.value is num)
-            .map((d) => (d.value as num).toDouble())
-            .reduce((a, b) => a + b) / heartRateData.length;
+      final validHR = heartRateData
+          .where((d) => d.value is num)
+          .map((d) => (d.value as num).toDouble())
+          .toList();
 
+      if (validHR.isNotEmpty) {
+        final avgHR = validHR.reduce((a, b) => a + b) / validHR.length;
         // Normalize: 60-100 BPM maps to 1.0-0.0 (lower resting HR = higher energy)
         metrics['heartRate'] = _clamp((100 - avgHR) / 40, 0.0, 1.0);
       }
@@ -66,12 +67,13 @@ class BiometricSyncService {
         types: [HealthDataType.SLEEP_ASLEEP],
       );
 
-      if (sleepData.isNotEmpty) {
-        final totalSleepMinutes = sleepData
-            .where((d) => d.value is num)
-            .map((d) => (d.value as num).toDouble())
-            .reduce((a, b) => a + b);
+      final validSleep = sleepData
+          .where((d) => d.value is num)
+          .map((d) => (d.value as num).toDouble())
+          .toList();
 
+      if (validSleep.isNotEmpty) {
+        final totalSleepMinutes = validSleep.reduce((a, b) => a + b);
         // Normalize: 7-9 hours (420-540 min) maps to 0.0-1.0
         metrics['sleep'] = _clamp((totalSleepMinutes - 420) / 120, 0.0, 1.0);
       }
@@ -83,12 +85,13 @@ class BiometricSyncService {
         types: [HealthDataType.STEPS],
       );
 
-      if (stepData.isNotEmpty) {
-        final totalSteps = stepData
-            .where((d) => d.value is num)
-            .map((d) => (d.value as num).toDouble())
-            .reduce((a, b) => a + b);
+      final validSteps = stepData
+          .where((d) => d.value is num)
+          .map((d) => (d.value as num).toDouble())
+          .toList();
 
+      if (validSteps.isNotEmpty) {
+        final totalSteps = validSteps.reduce((a, b) => a + b);
         // Normalize: 0-10000 steps maps to 0.0-1.0
         metrics['activity'] = _clamp(totalSteps / 10000, 0.0, 1.0);
       }
